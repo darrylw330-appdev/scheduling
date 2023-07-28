@@ -11,4 +11,7 @@
 
 class User < ApplicationRecord
   has_secure_password
+  has_many :work_days
+  has_many :work_times, through: :work_days
+  has_many :bookings
 end
