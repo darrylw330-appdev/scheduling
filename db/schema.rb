@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_27_200506) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_28_153917) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_27_200506) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "bookings", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "work_day_id"
+    t.bigint "work_time_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_bookings_on_user_id"
+    t.index ["work_day_id"], name: "index_bookings_on_work_day_id"
+    t.index ["work_time_id"], name: "index_bookings_on_work_time_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -29,4 +40,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_27_200506) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "work_days", force: :cascade do |t|
+    t.string "day_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["day_name"], name: "index_work_days_on_day_name", unique: true
+  end
+
+  create_table "work_times", force: :cascade do |t|
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "bookings", "users"
+  add_foreign_key "bookings", "work_days"
+  add_foreign_key "bookings", "work_times"
 end
